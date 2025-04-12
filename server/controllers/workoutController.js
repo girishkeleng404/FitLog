@@ -1,8 +1,8 @@
-const { WorkOuts } = require("../models");
+const { Workout } = require("../models");
 
 const addWorkout = async (req, res) => {
   try {
-    const workout = await WorkOuts.create(req.body);
+    const workout = await Workout.create(req.body);
     res.status(201).json(workout);
   } catch (err) {
     console.log(err);
@@ -12,7 +12,7 @@ const addWorkout = async (req, res) => {
 
 const getAllWorkouts = async (req, res) => {
   try {
-    const workouts = await WorkOuts.findAll();
+    const workouts = await Workout.findAll();
     res.json(workouts);
   } catch (err) {
     console.log(err);

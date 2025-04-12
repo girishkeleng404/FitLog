@@ -1,16 +1,30 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require(".");
-
+// User model (user.js)
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    username: {
+      type: DataTypes.STRING,
+    },
+    email: {
+      type: DataTypes.STRING,
+    },
+    password: {
+      type: DataTypes.STRING,
+    },
   });
+
+  // Add the association
   User.associate = (models) => {
-    User.hasMany(models.Meal);
-    User.hasMany(models.Workout);
-    User.hasMany(models.WeightLog);
+    User.hasMany(models.Workout, {
+      foreignKey: "userId",
+      onDelete: "CASCADE", // Ensures that workouts are deleted when the user is deleted
+    });
   };
+
   return User;
 };
