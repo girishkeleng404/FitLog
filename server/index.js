@@ -5,6 +5,7 @@ const app = express();
 const db = require("./models");
 
 const authRoutes = require("./routes/authRoutes");
+const workoutRoutes = require("./routes/workoutRoutes");
 
 app.use(express.json());
 
@@ -15,6 +16,8 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/workouts", workoutRoutes);
 
 const PORT = process.env.PORT;
 db.sequelize.sync().then(() => {
