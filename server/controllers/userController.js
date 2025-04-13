@@ -1,16 +1,19 @@
-const userService = require("../services/userService");
+const { getUserWithWorkouts } = require("../services/userService");
 
-const getUserWorkouts = async (req, res) => {
+const getUserWithWorkoutsController = async (req, res) => {
   try {
-    const user = await userService.getUserWithWorkouts(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
+    const requestedUserId = parseInt(req.params.id);
+    const loggedInUserId = req.user.id;
+
+    if (requestedUserId !== loggedInUserId) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const userWithWorkouts = await getUserWithWorkouts(requestedUserId);
+    res.json(userWithWorkouts);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "server error" });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-module.exports = {
-  getUserWorkouts,
-};
+module.exports = { getUserWithWorkoutsController };

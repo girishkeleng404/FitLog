@@ -1,7 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { getUserWorkouts } = require("../controllers/userController");
+const authMiddleware = require("../middleware/auth");
+const {
+  getUserWithWorkoutsController,
+} = require("../controllers/userController");
 
-router.get("/users/:id/workouts", getUserWorkouts);
+// 🔐 Protected route to get a user's workouts
+router.get(
+  "/users/:id/workouts",
+  authMiddleware,
+  getUserWithWorkoutsController,
+);
 
 module.exports = router;
