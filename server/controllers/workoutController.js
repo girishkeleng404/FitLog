@@ -1,26 +1,43 @@
 const { Workout } = require("../models");
 
+const { Sequelize } = require("../models");
+
 const addWorkout = async (req, res) => {
+  const t = await Workout.sequelize.transaction();
+
   try {
     const userId = req.user.id;
     const { type, duration, date, calories } = req.body;
 
-    // const workout = await Workout.create(req.body);
-    const workout = await Workout.create({
-      type,
-      duration,
-      date,
-      calories,
-      userId, // ✅ associate workout with the logged-in user
+    const lastWorkout = await Workout.findOne({
+      where: { userId },
+      order: [["userWorkoutId", "DESC"]],
+      transaction: t,
+      lock: t.LOCK.UPDATE, // Prevent race condition
     });
 
+    const newUserWorkoutId = lastWorkout ? lastWorkout.userWorkoutId + 1 : 1;
+
+    const workout = await Workout.create(
+      {
+        type,
+        duration,
+        date,
+        calories,
+        userId,
+        userWorkoutId: newUserWorkoutId,
+      },
+      { transaction: t },
+    );
+
+    await t.commit();
     res.status(201).json(workout);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err: "Faild to add workout" });
+    await t.rollback();
+    console.error(err);
+    res.status(500).json({ error: "Failed to add workout" });
   }
 };
-
 const getAllWorkouts = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -28,6 +45,14 @@ const getAllWorkouts = async (req, res) => {
     const workouts = await Workout.findAll({
       where: { userId },
       order: [["date", "DESC"]], // optional, to sort by date
+      attributes: [
+        ["userWorkoutId", "id"],
+        ["type", "type"],
+        ["duration", "duration"],
+        ["calories", "calories"],
+        ["date", "date"],
+        ["userId", "userId"],
+      ],
     });
     res.json(workouts);
   } catch (err) {

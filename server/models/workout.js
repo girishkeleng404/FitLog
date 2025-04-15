@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+    userWorkoutId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   // Add the association
