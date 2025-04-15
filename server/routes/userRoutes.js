@@ -6,10 +6,6 @@ const {
 } = require("../controllers/userController");
 
 // 🔐 Protected route to get a user's workouts
-router.get(
-  "/users/:id/workouts",
-  authMiddleware,
-  getUserWithWorkoutsController,
-);
+router.get("/users/workouts", authMiddleware, getUserWithWorkoutsController);
 
 module.exports = router;
