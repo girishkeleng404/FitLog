@@ -8,8 +8,26 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, email, password: hash });
-    res.status(201).json({ message: "User registerd", user });
+    const newUser = await User.create({ username, email, password: hash });
+    // res.status(201).json({ message: "User registerd", user });
+
+    // Generate JWT Token
+
+    const token = jwt.sign(
+      { id: newUser.id, username: newUser.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" },
+    );
+
+    res.status(201).json({
+      message: "User registerd succussful",
+      user: {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+      },
+      token,
+    });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       const field = error.errors[0].path;

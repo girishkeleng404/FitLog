@@ -2,7 +2,18 @@ const { Workout } = require("../models");
 
 const addWorkout = async (req, res) => {
   try {
-    const workout = await Workout.create(req.body);
+    const userId = req.user.id;
+    const { type, duration, date, calories } = req.body;
+
+    // const workout = await Workout.create(req.body);
+    const workout = await Workout.create({
+      type,
+      duration,
+      date,
+      calories,
+      userId, // ✅ associate workout with the logged-in user
+    });
+
     res.status(201).json(workout);
   } catch (err) {
     console.log(err);
@@ -12,6 +23,8 @@ const addWorkout = async (req, res) => {
 
 const getAllWorkouts = async (req, res) => {
   try {
+    const userId = req.user.id;
+
     const workouts = await Workout.findAll();
     res.json(workouts);
   } catch (err) {

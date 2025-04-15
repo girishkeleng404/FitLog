@@ -5,7 +5,9 @@ const {
   getAllWorkouts,
 } = require("../controllers/workoutController");
 
-router.post("/add", addWorkout);
-router.get("/", getAllWorkouts);
+const authMiddleWare = require("../middleware/auth");
+
+router.post("/add", authMiddleWare, addWorkout);
+router.get("/", authMiddleWare, getAllWorkouts);
 
 module.exports = router;
