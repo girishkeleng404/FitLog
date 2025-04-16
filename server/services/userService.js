@@ -6,7 +6,7 @@ const getUserWithWorkouts = async (userId) => {
     attributes: ["id", "username"],
     include: {
       model: Workout,
-      attributes: ["id", "type", "duration", "date", "calories"], // optional: choose fields
+      attributes: ["id", "type", "duration", "calories", "date"], // optional: choose fields
     },
   });
 };

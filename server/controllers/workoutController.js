@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { Workout } = require("../models");
 
 const { Sequelize } = require("../models");
@@ -31,7 +32,14 @@ const addWorkout = async (req, res) => {
     );
 
     await t.commit();
-    res.status(201).json(workout);
+    res.status(201).json({
+      id: workout.userWorkoutId,
+      type: workout.type,
+      duration: workout.duration,
+      calories: workout.calories,
+      date: workout.date,
+      createdAt: workout.createdAt,
+    });
   } catch (err) {
     await t.rollback();
     console.error(err);
@@ -51,7 +59,9 @@ const getAllWorkouts = async (req, res) => {
         ["duration", "duration"],
         ["calories", "calories"],
         ["date", "date"],
-        ["userId", "userId"],
+        //["userId", "userId"],
+        ["createdAt", "createdAt"],
+        ["updatedAt", "updatedAt"],
       ],
     });
     res.json(workouts);
@@ -63,11 +73,17 @@ const getAllWorkouts = async (req, res) => {
 
 const updateWorkout = async (req, res) => {
   try {
-    const workoutId = parseInt(req.params.id);
+    const userWorkoutId = parseInt(req.params.id);
+    console.log("Workout ID from params:", req.params.id);
+
     // console.log("Decoded user:", req.user);
     const loggedInUserId = req.user.id;
-
-    const workout = await Workout.findByPk(workoutId);
+    const { type, duration, calories, date } = req.body;
+    const workout = await Workout.findOne({
+      where: {
+        userWorkoutId,
+      },
+    });
 
     if (!workout) {
       return res.status(404).json({ message: "Workout not found" });
@@ -76,19 +92,35 @@ const updateWorkout = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    await workout.update(req.body);
-    res.json(workout);
+    await workout.update({
+      type: type,
+      duration: duration,
+      calories: calories,
+      date: date,
+    });
+    res.json({
+      id: workout.userWorkoutId,
+      type: workout.type,
+      duration: workout.duration,
+      calories: workout.calories,
+      date: workout.date,
+      updatedAt: workout.updatedAt,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Faild to update workout" });
+    res.status(500).json({ error: "Failed to update workout" });
   }
 };
 
 const deleteWorkout = async (req, res) => {
-  const workoutId = parseInt(req.params.id);
+  const userWorkoutId = parseInt(req.params.id);
   console.log("Decoded user:", req.user);
   const loggedInUserId = req.user.id;
   try {
-    const workout = await Workout.findByPk(workoutId);
+    const workout = await Workout.findOne({
+      where: {
+        userWorkoutId,
+      },
+    });
 
     if (!workout) {
       return res.status(404).json({ message: "Workout not found" });
