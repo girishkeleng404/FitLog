@@ -15,9 +15,36 @@ async function createMeal(userId, mealData) {
   });
 }
 
-async function getAllMeals() {}
+async function getAllMeals(userId) {
+  return await Meal.findAll({
+    where: { userId },
+    order: [["id", "DESC"]],
+    attributes: [["userMealId", "id"], "type", "name", "calories", "date"],
+  });
+}
 
-async function updateMeal() {}
+async function updateMeal(userId, mealId, data) {
+  const meal = await Meal.findOne({
+    where: {
+      userMealId: mealId,
+      userId: userId,
+    },
+  });
+  if (!meal) throw new Error("not_found");
+
+  console.log("Meal userId:", meal.userId); // Log the meal's userId
+  console.log("Logged-in userId:", userId); // Log the logged-in userId
+  if (meal.userId !== userId) throw new Error("forbidden");
+
+  await meal.update({
+    type: data.type,
+    name: data.name,
+    calories: data.calories,
+    date: data.date,
+  });
+
+  return meal;
+}
 
 async function deleteMeal() {}
 
