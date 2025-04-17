@@ -9,6 +9,6 @@ router.use(authMiddleWare);
 router.post("/meals", mealController.createMeal);
 router.get("/meals", mealController.getMeals);
 router.put("/meals/:id", mealController.updateMeal);
-// router.delete('/meals/:id', mealController.deleteMeal);
+router.delete("/meals/:id", mealController.deleteMeal);
 
 module.exports = router;

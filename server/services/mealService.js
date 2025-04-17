@@ -46,7 +46,18 @@ async function updateMeal(userId, mealId, data) {
   return meal;
 }
 
-async function deleteMeal() {}
+async function deleteMeal(userId, mealId) {
+  const meal = await Meal.findOne({
+    where: {
+      userId,
+      userMealId: mealId,
+    },
+  });
+
+  if (!meal) throw new Error("not_found");
+  if (meal.userId !== userId) throw new Error("forbidden");
+  await meal.destroy();
+}
 
 module.exports = {
   createMeal,

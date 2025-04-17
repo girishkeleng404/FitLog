@@ -42,3 +42,10 @@ exports.updateMeal = async (req, res) => {
     res.status(500).json({ message: "Failed to update meal" });
   }
 };
+
+exports.deleteMeal = async (req, res) => {
+  try {
+    await mealService.deleteMeal(req.user.id, parseInt(req.params.id));
+    res.status(200).json({ message: "Meal deleted successfully" });
+  } catch (error) {}
+};
