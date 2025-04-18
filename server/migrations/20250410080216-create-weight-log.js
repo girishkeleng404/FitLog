@@ -1,34 +1,31 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('WeightLogs', {
+    await queryInterface.createTable("WeightLogs", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       weight: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
       },
       date: {
-        type: Sequelize.DATE
-      },
-      userId: {
-        type: Sequelize.UUID
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('WeightLogs');
-  }
+    await queryInterface.dropTable("WeightLogs");
+  },
 };

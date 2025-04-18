@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
 const userRoutes = require("./routes/userRoutes");
 const mealRoutes = require("./routes/mealRoutes");
+const weightRoutes = require("./routes/weightRoutes");
 
 app.use(express.json());
 // app.use(bodyParser.json());
@@ -26,6 +27,8 @@ app.use("/api/workouts", workoutRoutes);
 app.use("/api", userRoutes);
 
 app.use("/api", mealRoutes);
+
+app.use("/api", weightRoutes);
 
 const PORT = process.env.PORT;
 db.sequelize.sync().then(() => {

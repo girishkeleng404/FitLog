@@ -19,12 +19,22 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Add the association
+
   User.associate = (models) => {
     User.hasMany(models.Workout, {
       foreignKey: "userId",
-      onDelete: "CASCADE", // Ensures that workouts are deleted when the user is deleted
+      onDelete: "CASCADE",
+    });
+
+    User.hasMany(models.WeightLog, {
+      foreignKey: "userId",
+      onDelete: "CASCADE",
+    });
+
+    User.hasMany(models.Meal, {
+      foreignKey: "userId",
+      onDelete: "CASCADE",
     });
   };
-
   return User;
 };
