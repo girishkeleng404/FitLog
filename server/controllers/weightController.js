@@ -21,8 +21,8 @@ exports.updateWeight = async (req, res) => {
       message: "updated Succesfully",
       updated: {
         id: updated.userWeightId,
-        date: updated.date,
-        weight: date,
+        date: date,
+        weight: updated.weight,
         note: updated.note,
       },
     });
