@@ -1,19 +1,19 @@
 {
-  "name": "fitlog-frontend",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@radix-ui/react-slot": "^1.2.0",
+    "@radix-ui/react-slot": "^1.2.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.501.0",
+    "lucide-react": "^0.507.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.12",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
@@ -32,6 +32,8 @@
     "globals": "^16.0.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"
   }
 }
